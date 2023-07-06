@@ -27,4 +27,5 @@ public class Employee {
 	private Date hireDate;
 	private Date entDate;
 	private char entYn;
+	private String gender;
 }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="employee">
-	<resultMap id="employeeMap" type="com.mybatis.model.vo.Employee">
+	<resultMap id="employeeMap" type="emp">
 		<id property="empId" column="emp_id"/>
 		<result property="empName" column="emp_name"/>
 		<result property="empNo" column="emp_no"/>
-		<result property="deptCode" column="dept_title"/>
-		<result property="jobCode" column="job_name"/>
+		<result property="deptCode" column="dept_code"/>
+		<result property="jobCode" column="job_code"/>
 		<result property="salLevel" column="sal_level"/>
 		<result property="managerId" column="manager_id"/>
 		<result property="hireDate" column="hire_date"/>
@@ -14,9 +14,60 @@
 		<result property="entYn" column="ent_Yn"/>
 	</resultMap>
 	<select id="selectEmployeeList" resultMap="employeeMap">
-		SELECT * FROM EMPLOYEE JOIN DEPARTMENT ON DEPT_CODE=DEPT_ID JOIN JOB USING(JOB_CODE)
+		SELECT * FROM EMPLOYEE
 	</select>
 	<select id="selectEmployeeCount" resultType="_int">
 		SELECT COUNT(*) FROM EMPLOYEE
+	</select>
+	<!-- 
+		파라미터 값을 가져올 때
+		#{} : setType() 값을 대입하기 때문에 자료형에 맞춰서 리터럴을 대입한다.
+		${} : 문자열로 처리한다. ->sql문에 replaceAll 쓴 거랑 같음
+	 -->
+	<select id="searchEmp" resultMap="employeeMap" parameterType="map">
+		SELECT *
+		FROM (SELECT E.*, DECODE(SUBSTR(EMP_NO,8,1),2,'F',4,'F','M') AS GENDER FROM EMPLOYEE E)
+		<!-- <where> -->
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword!=null and keyword!=''">
+				${type} LIKE '%'||#{keyword}||'%'
+			</if>
+			<if test="gender!=null and gender!=''">
+				AND GENDER=#{gender}
+			</if>
+			<if test="salary!=null and salary!=0 and salFlag!=null and salFlag!=''">
+				<choose>
+					<when test="salFlag eq 'ge'">
+						AND SALARY>=#{salary}
+					</when>
+					<otherwise>
+						AND SALARY<![CDATA[<=]]>#{salary}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="deptCodes!=null and deptCodes!=''">
+				AND DEPT_CODE IN
+				<foreach item="d" collection="deptCodes" open="(" separator="," close=")">
+					#{d}
+				</foreach>
+			</if>
+			<if test="jobCodes!=null and jobCodes!=''">
+				AND JOB_CODE IN
+				<foreach item="j" collection="jobCodes" open="(" separator="," close=")">
+					#{j}
+				</foreach>
+			</if>
+			<if test="hireDate!=null and hireDate!='' and hireFlag!=null and hireFlag!=''">
+				<choose>
+					<when test="hireFlag eq 'le'">
+						AND HIRE_DATE>=TO_DATE(#{hireDate},'YY-MM-DD')
+					</when>
+					<otherwise>
+						AND HIRE_DATE<![CDATA[<=]]>TO_DATE(#{hireDate},'YY-MM-DD')
+					</otherwise>
+				</choose>
+			</if>
+		</trim>
+		<!-- </where> -->
 	</select>
 </mapper>

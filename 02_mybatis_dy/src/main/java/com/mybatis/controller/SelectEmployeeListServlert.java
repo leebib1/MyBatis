@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mybatis.model.service.EmpService;
+import com.mybatis.model.service.EmpServiceImpl;
 import com.mybatis.model.service.EmployeeService;
 import com.mybatis.model.vo.Employee;
 
@@ -17,20 +19,23 @@ import com.mybatis.model.vo.Employee;
 public class SelectEmployeeListServlert extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-   
+	private EmpService service;
+	
     public SelectEmployeeListServlert() {
     }
 
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		service=new EmpServiceImpl();
 		int cPage;
+		
 		try {
 			cPage=Integer.parseInt(request.getParameter("cPage"));
 		}catch(Exception e){
 			cPage=1;
 		}
 		int numPerpage=10;
-		int totalData=new EmployeeService().selectEmployeeCount();
+		int totalData=service.selectEmployeeCount();
 		int totalPage=(int)Math.ceil((double)totalData/numPerpage);
 		int pageBarSize=5;
 		int pageNo=((cPage-1)/pageBarSize)*pageBarSize+1;
@@ -72,7 +77,7 @@ public class SelectEmployeeListServlert extends HttpServlet {
 		}
 		pageBar+="</ul>";
 		request.setAttribute("pageBar", pageBar);
-		List<Employee> list=new EmployeeService().selectEmployeeList(cPage,numPerpage);
+		List<Employee> list=service.selectEmployeeList(cPage,numPerpage);
 		request.setAttribute("list", list);
 		request.getRequestDispatcher("/views/employeeList.jsp").forward(request, response);
 	}
