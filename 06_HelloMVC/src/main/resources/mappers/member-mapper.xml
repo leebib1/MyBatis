@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="member">
+	<resultMap id="boardMap" type="com.web.board.dto.Board">
+		<id property="boardNo" column="board_no"/>
+		<result property="boardTitle" column="board_title"/>
+		<result property="boardContent" column="board_content"/>
+		<result property="boardOriginalFilename" column="board_original_filename"/>
+		<result property="boardRenamedFilename" column="board_renamed_filename"/>
+		<result property="boardDate" column="board_date"/>
+		<result property="boardReadcount" column="board_readcount"/>
+		<association property="member" resultMap="memberMap"/> 
+		<collection property="comments" resultMap="commentMap"/>
+	</resultMap>
+	<resultMap id="memberMap" type="com.web.member.model.dto.Member">
+		<id property="userId" column="userid"/>
+		<result property="password" column="password"/>
+		<result property="userName" column="user_name"/>
+		<result property="gender" column="gender"/>
+		<result property="age" column="age"/>
+		<result property="email" column="email"/>
+		<result property="phone" column="phone"/>
+		<result property="address" column="address"/>
+		<!-- <result property="hobby" column="hobby"/> -->
+		<result property="enrolldate" column="enrolldate"/>
+	</resultMap>
+	<resultMap id="commentMap" type="com.web.board.dto.BoardComment">
+		<id property="boardCommentNo" column="board_comment_no"/>
+		<result property="boardCommentLevel" column="board_comment_level"/>
+		<result property="boardCommentWriter" column="board_comment_writer"/>
+		<result property="boardCommentContent" column="board_comment_content"/>
+		<result property="boardRef" column="board_ref"/>
+		<result property="boardCommentRef" column="board_comment_ref"/>
+		<result property="boardCommentDate" column="board_comment_date"/>
+		<association property="board" resultMap="boardMap"/>
+	</resultMap>
+	
+	<select id="selectMember" resultMap="memberMap" parameterType="map">
+		SELECT * FROM MEMBER
+		<where>
+			<if test="id!=null and id!=''">
+				USERID=#{id}
+			</if>
+			<if test="pwd!=null and pwd!=''">
+				AND PASSWORD=#{pwd}
+			</if>
+		</where>
+	</select>
+</mapper>
