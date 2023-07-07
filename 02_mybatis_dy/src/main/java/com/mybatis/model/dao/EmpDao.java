@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.mybatis.model.vo.Department;
 import com.mybatis.model.vo.Employee;
 
 public interface EmpDao {
@@ -13,4 +14,6 @@ public interface EmpDao {
 	List<Employee> searchEmp(SqlSession session, Map<String,Object> param);
 
 	int selectEmployeeCount(SqlSession session);
+	
+	List<Department> selectAllDept(SqlSession session);
 }

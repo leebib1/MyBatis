@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="member">
+	<resultMap id="boardMap" type="board">
+		<id property="boardNo" column="board_no"/>
+		<result property="boardTitle" column="board_title"/>
+		<result property="boardContent" column="board_content"/>
+		<result property="boardOriginalFilename" column="board_original_filename"/>
+		<result property="boardRenamedFilename" column="board_renamed_filename"/>
+		<result property="boardDate" column="board_date"/>
+		<result property="boardReadcount" column="board_readcount"/>
+		<association property="member" resultMap="memberMap"/> 
+		<!-- ofType으로 클래스 객체 자체를 지정할 수 있다. 내부에 다시 id, result 태그 사용 가능함 -->
+		<collection property="comments" ofType="boardComment">
+			<id property="boardCommentNo" column="board_comment_no"/>
+			<result property="boardCommentLevel" column="board_comment_level"/>
+			<result property="boardCommentContent" column="board_comment_content"/>
+			<result property="boardRef" column="board_ref"/>
+			<result property="boardCommentRef" column="board_comment_ref"/>
+			<result property="boardCommentDate" column="board_comment_date"/>
+			<association property="boardCommentWriter" resultMap="memberMap"/>
+		</collection>
+	</resultMap>
+	<resultMap id="memberMap" type="member">
+		<id property="userId" column="userid"/>
+		<result property="password" column="password"/>
+		<result property="userName" column="username"/>
+		<result property="gender" column="gender"/>
+		<result property="age" column="age"/>
+		<result property="email" column="email"/>
+		<result property="phone" column="phone"/>
+		<result property="address" column="address"/>
+		<result property="hobby" column="hobby" typeHandler="strArrType"/>
+		<result property="enrolldate" column="enrolldate"/>
+	</resultMap>
+	<resultMap id="commentMap" type="boardComment">
+		<id property="boardCommentNo" column="board_comment_no"/>
+		<result property="boardCommentLevel" column="board_comment_level"/>
+		<!-- <result property="boardCommentWriter" column="board_comment_writer"/> -->
+		<result property="boardCommentContent" column="board_comment_content"/>
+		<result property="boardRef" column="board_ref"/>
+		<result property="boardCommentRef" column="board_comment_ref"/>
+		<result property="boardCommentDate" column="board_comment_date"/>
+		<association property="boardCommentWriter" resultMap="memberMap"/>
+	</resultMap>
+	<select id="memberList" resultType="map">
+		SELECT * FROM MEMBER
+	</select>
+	<select id="selectBoard" resultMap="boardMap" parameterType="_int">
+		SELECT *
+		FROM BOARD LEFT JOIN BOARD_COMMENT ON BOARD_NO=BOARD_REF JOIN MEMBER ON BOARD_WRITER=USERID
+			JOIN MEMBER M ON BOARD_COMMENT_WRITER=M.USERID
+		WHERE BOARD_NO=#{no}
+	</select>
+</mapper>

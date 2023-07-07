@@ -105,7 +105,7 @@
 				<td><c:out value="${e.jobCode }"/></td>
 				<td><c:out value="${e.salLevel }"/></td>
 				<td><fmt:formatNumber value="${e.salary }" type="currency"/></td>
-				<td><fmt:formatNumber value="${e.bonuse }" type="percent"/></td>
+				<td><fmt:formatNumber value="${e.bonus }" type="percent"/></td>
 				<td><c:out value="${e.managerId }"/></td>
 				<td><c:out value="${e.hireDate }"/></td>
 				<td><c:out value="${e.entDate }"/></td>

@@ -21,4 +21,16 @@ public class SessionTemplate {
 		}
 		return session;
 	}
+	
+	public static SqlSession getWebSession() {
+		String file="mybatis-config.xml";
+		SqlSession session=null;
+		try(InputStream is=Resources.getResourceAsStream(file)) {
+			//원하는 id값을 매개변수로 넣으면 id값에 설정한 DB환경으로 접속할 수 있다.
+			session=new SqlSessionFactoryBuilder().build(is,"web").openSession(false);
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		return session;
+	}
 }
