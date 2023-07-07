@@ -14,11 +14,11 @@
 		<collection property="comments" ofType="boardComment">
 			<id property="boardCommentNo" column="board_comment_no"/>
 			<result property="boardCommentLevel" column="board_comment_level"/>
+			<result property="boardCommentWriter" column="board_comment_writer"/>
 			<result property="boardCommentContent" column="board_comment_content"/>
 			<result property="boardRef" column="board_ref"/>
 			<result property="boardCommentRef" column="board_comment_ref"/>
 			<result property="boardCommentDate" column="board_comment_date"/>
-			<association property="boardCommentWriter" resultMap="memberMap"/>
 		</collection>
 	</resultMap>
 	<resultMap id="memberMap" type="member">
@@ -36,12 +36,11 @@
 	<resultMap id="commentMap" type="boardComment">
 		<id property="boardCommentNo" column="board_comment_no"/>
 		<result property="boardCommentLevel" column="board_comment_level"/>
-		<!-- <result property="boardCommentWriter" column="board_comment_writer"/> -->
+		<result property="boardCommentWriter" column="board_comment_writer"/>
 		<result property="boardCommentContent" column="board_comment_content"/>
 		<result property="boardRef" column="board_ref"/>
 		<result property="boardCommentRef" column="board_comment_ref"/>
 		<result property="boardCommentDate" column="board_comment_date"/>
-		<association property="boardCommentWriter" resultMap="memberMap"/>
 	</resultMap>
 	<select id="memberList" resultType="map">
 		SELECT * FROM MEMBER
@@ -49,7 +48,6 @@
 	<select id="selectBoard" resultMap="boardMap" parameterType="_int">
 		SELECT *
 		FROM BOARD LEFT JOIN BOARD_COMMENT ON BOARD_NO=BOARD_REF JOIN MEMBER ON BOARD_WRITER=USERID
-			JOIN MEMBER M ON BOARD_COMMENT_WRITER=M.USERID
 		WHERE BOARD_NO=#{no}
 	</select>
 </mapper>

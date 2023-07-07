@@ -44,6 +44,26 @@
 		"oracle_thin-18928ce2fff-31c78a4b1c0a930a": {
 			"provider": "oracle",
 			"driver": "oracle_thin",
+			"name": "BS",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "1521",
+				"database": "XE",
+				"url": "jdbc:oracle:thin:@localhost:1521:XE",
+				"configurationType": "MANUAL",
+				"home": "C:\\app\\GDC10\\product\\18.0.0\\dbhomeXE",
+				"type": "dev",
+				"provider-properties": {
+					"@dbeaver-connection-type@": "BASIC",
+					"@dbeaver-sid-service@": "SID"
+				},
+				"auth-model": "oracle_native"
+			}
+		},
+		"oracle_thin-1892e0d1664-4535386dd4445f5": {
+			"provider": "oracle",
+			"driver": "oracle_thin",
 			"name": "localhost 2",
 			"save-password": true,
 			"configuration": {

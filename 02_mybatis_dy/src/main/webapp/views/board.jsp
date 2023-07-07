@@ -36,7 +36,7 @@
 		<c:forEach items="${board.comments }" var="c">
 		<tr><th colspan="2">댓글</th></tr>
 		<tr>
-			<td>${c.boardCommentWriter.userId }</td>
+			<td>${c.boardCommentWriter }</td>
 			<td>${c.boardCommentDate }</td>
 		</tr>
 		<tr>

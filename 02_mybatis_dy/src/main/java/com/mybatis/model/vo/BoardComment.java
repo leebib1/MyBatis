@@ -12,11 +12,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = {"boardCommentWriter"})
 public class BoardComment {
 	private int boardCommentNo;
 	private int boardCommentLevel;
-	private Member boardCommentWriter;
+	private String boardCommentWriter;
 	private String boardCommentContent;
 	private int boardRef;
 	private int boardCommentRef;
